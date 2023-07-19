@@ -45,12 +45,18 @@ func getCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
 
         jsonCards, error := json.Marshal(globalCards)
         if error != nil {
-            pWriter.Write(jsonCards)
-        }
+            pWriter.WriteHeader(500)
+            return
+        } 
+
+        pWriter.Write(jsonCards)
     }
 }
 
 func main() {
+    globalCards = append(globalCards, CardStack { Name: "Neng", Description: "Neng Li is the President of China" })
+    globalCards = append(globalCards, CardStack { Name: "Prussia", Description: "German state during the 1800s or something." })
+
     http.HandleFunc("/", staticFiles)
     http.HandleFunc("/api/cardstacks", getCardStacks)
 
