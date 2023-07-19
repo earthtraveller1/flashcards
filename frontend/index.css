@@ -1,3 +1,8 @@
+body {
+    background-color: black;
+    color: white;
+}
+
 #big-title {
     font-family: sans-serif;
     text-align: center;
@@ -10,4 +15,39 @@
     font-style: italic;
     text-align: center;
     margin-top: 0;
+}
+
+#stack-list {
+    max-width: 48em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5em;
+}
+
+.stack-button {
+    background-color: rgb(19, 61, 14);
+    padding: 0.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-radius: 1em;
+    user-select: none;
+    transition-duration: 250ms;
+}
+
+.stack-button:hover {
+    background-color: rgb(8, 38, 4);
+}
+
+.stack-button:active {
+    background-color: rgb(13, 113, 85);
+}
+
+.stack-button h1 {
+    font-style: bold;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.stack-button p {
+    text-align: center;
 }
