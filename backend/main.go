@@ -8,7 +8,12 @@ import (
 )
 
 func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
-    fileContent, error := ioutil.ReadFile("../frontend/" + pRequest.URL.RequestURI())
+    fileName := pRequest.URL.RequestURI()
+    if fileName == "/" {
+        fileName = "index.html"
+    }
+
+    fileContent, error := ioutil.ReadFile("../frontend/" + fileName)
     if error != nil {
         pWriter.Write([]byte("<h1>404</h1> <p>Not Found"))
     }
