@@ -25,7 +25,7 @@ body {
 }
 
 .stack-button {
-    background-color: rgb(19, 61, 14);
+    background-color: rgb(2, 8, 71);
     padding: 0.5em;
     margin-top: 1em;
     margin-bottom: 1em;
@@ -35,11 +35,11 @@ body {
 }
 
 .stack-button:hover {
-    background-color: rgb(8, 38, 4);
+    background-color: rgb(2, 8, 51);
 }
 
 .stack-button:active {
-    background-color: rgb(13, 113, 85);
+    background-color: rgb(3, 11, 94);
 }
 
 .stack-button h1 {
