@@ -26,6 +26,10 @@ func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
         pWriter.Header().Set("Content-Type", "text/css")
     }
 
+    if strings.HasSuffix(fileName, ".js") {
+        pWriter.Header().Set("Content-Type", "application/javascript")
+    }
+
     fileContent, error := ioutil.ReadFile("../frontend/" + fileName)
     if error != nil {
         pWriter.Write([]byte("<h1>404</h1> <p>Not Found"))
