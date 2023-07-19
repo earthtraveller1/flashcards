@@ -5,12 +5,17 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 )
 
 func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
     fileName := pRequest.URL.RequestURI()
     if fileName == "/" {
         fileName = "index.html"
+    }
+
+    if strings.HasSuffix(fileName, ".css") {
+        pWriter.Header().Set("Content-Type", "text/css")
     }
 
     fileContent, error := ioutil.ReadFile("../frontend/" + fileName)
