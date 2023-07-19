@@ -1,12 +1,20 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
 )
+
+type CardStack struct {
+    Name string
+    Description string
+}
+
+var globalCards []CardStack
 
 func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
     fileName := pRequest.URL.RequestURI()
@@ -26,8 +34,25 @@ func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
     pWriter.Write(fileContent)
 }
 
+func doesFileExist(pFilename string) bool {
+    _, error := os.Stat(pFilename)
+    return !os.IsNotExist(error)
+}
+
+func getCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
+    if pRequest.Method == "GET" {
+        pWriter.Header().Set("Content-Type", "application/json")
+
+        jsonCards, error := json.Marshal(globalCards)
+        if error != nil {
+            pWriter.Write(jsonCards)
+        }
+    }
+}
+
 func main() {
     http.HandleFunc("/", staticFiles)
+    http.HandleFunc("/api/cardstacks", getCardStacks)
 
     error := http.ListenAndServe("127.0.0.1:3000", nil)
     if error != nil {
