@@ -10,8 +10,19 @@ async function getCards() {
 getCards().then(cards => {
     let stacksListElement = document.getElementById("stack-list")
 
-    cards.forEach((stack, i, stacks) => {
-        stacksListElement.innerHTML += `<h1>${stack.Name}</h1>`
-        stacksListElement.innerHTML += `<p>${stack.Description}</h1>`
+    cards.forEach((stack, _i, _stacks) => {
+        let button = document.createElement("div")
+        button.classList.add("stack-button")
+
+        let title = document.createElement("h1")
+        title.innerText = stack.Name
+
+        let description = document.createElement("p")
+        description.innerText = stack.Description
+
+        button.appendChild(title)
+        button.appendChild(description)
+
+        stacksListElement.appendChild(button)
     })
 })
