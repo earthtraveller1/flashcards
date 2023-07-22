@@ -57,7 +57,7 @@ body {
     justify-items: center;
 }
 
-#button-create-stacks {
+.normal-button {
     font-family: sans-serif;
     font-size: 2em;
     font-style: bold;
@@ -73,11 +73,43 @@ body {
     transition-duration: 250ms;
 }
 
-#button-create-stacks:hover {
+.normal-button:hover {
     background-color: rgb(8, 38, 4);
 }
 
-#button-create-stacks:active {
+.normal-button:active {
     background-color: rgb(13, 113, 85);
 }
 
+#create-stack-title {
+    font-family: sans-serif;
+    font-size: 3em;
+    text-align: center;
+}
+
+#create-stack-form {
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    justify-items: center;
+}
+
+#create-stack-form input {
+    margin: 0.5em;
+}
+
+.text-input {
+    font-family: sans-serif;
+    font-size: 1.5em;
+    padding: 1em;
+    min-width: 25em;
+    border-radius: 1em;
+    border-style: none;
+    background-color: rgb(0, 5, 64);
+    color: white;
+    transition-duration: 250ms;
+}
+
+.text-input:select {
+    border-style: none;
+}
