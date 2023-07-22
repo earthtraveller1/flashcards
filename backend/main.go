@@ -82,8 +82,7 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
             return
         }
 
-        fmt.Printf("name = %s\n", requestInfo.Name)
-        fmt.Printf("description = %s\n", requestInfo.Description)
+        globalCards = append(globalCards, requestInfo)
 	}
 }
 
