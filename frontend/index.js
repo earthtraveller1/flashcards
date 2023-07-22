@@ -17,10 +17,10 @@ function initMainPage() {
             button.classList.add("stack-button")
 
             let title = document.createElement("h1")
-            title.innerText = stack.Name
+            title.innerText = stack.name
 
             let description = document.createElement("p")
-            description.innerText = stack.Description
+            description.innerText = stack.description
 
             button.appendChild(title)
             button.appendChild(description)
