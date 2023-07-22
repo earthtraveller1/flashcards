@@ -10,6 +10,7 @@ async function getCards() {
 function initMainPage() {
     getCards().then(cards => {
         let stacksListElement = document.getElementById("stack-list")
+        stacksListElement.innerHTML = ""
 
         cards.forEach((stack, _i, _stacks) => {
             let button = document.createElement("div")
