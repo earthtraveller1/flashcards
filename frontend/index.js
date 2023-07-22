@@ -8,6 +8,17 @@ async function getCards() {
 }
 
 function main() {
+    let createStackPart = document.getElementById("create-stack-part")
+    let mainPage = document.getElementById("main")
+
+    createStackPart.remove()
+
+    let createStackButton = document.getElementById("button-create-stacks")
+    createStackButton.onclick = () => {
+        mainPage.parentElement.append(createStackPart)
+        mainPage.remove()
+    }
+
     getCards().then(cards => {
         let stacksListElement = document.getElementById("stack-list")
 
