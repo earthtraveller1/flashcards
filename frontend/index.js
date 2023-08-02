@@ -37,9 +37,15 @@ function initMainPage() {
 
 function initCreateStackPage(mainPage, createStackPage) {
     let button = document.getElementById("create-stack-submit-button")
+    let stackName = document.getElementById("new-stack-name")
+    let stackDescription = document.getElementById("new-stack-description")
+
+    stackName.value = ""
+    stackDescription.value = ""
+
     button.onclick = () => {
-        let name = document.getElementById("new-stack-name").value
-        let description = document.getElementById("new-stack-description").value
+        let name = stackName.value
+        let description = stackDescription.value
 
         const payload = {
             name: name,
