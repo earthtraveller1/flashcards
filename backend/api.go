@@ -53,3 +53,31 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
         globalCardStacks[stackId] = requestInfo
 	}
 }
+
+func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
+    uriParts := strings.Split(pRequest.URL.RequestURI(), "/")
+    stackID := uriParts[len(uriParts) - 1]
+
+    if pRequest.Method == "GET" {
+        pWriter.Header().Set("Content-Type", "application/json")
+        requestedStack, exists := globalCardStacks[stackID]
+
+        if !exists {
+            pWriter.WriteHeader(404)
+            pWriter.Write([]byte(fmt.Sprintf(`{ "error": "the %s stack does not exist"}`, stackID)))
+
+            return
+        }
+
+        stackJSON, error := json.Marshal(requestedStack)
+
+        if error != nil {
+            pWriter.WriteHeader(500)
+            pWriter.Write([]byte(`{ "error": "internal server error"}`))
+
+            return
+        }
+
+        pWriter.Write(stackJSON)
+    }
+}

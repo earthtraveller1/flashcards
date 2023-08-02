@@ -83,6 +83,7 @@ func main() {
     http.HandleFunc("/stack/", stackPage)
 
 	http.HandleFunc("/api/cardstacks", apiCardStacks)
+    http.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
 
 	error := http.ListenAndServe("127.0.0.1:3000", nil)
 	if error != nil {
