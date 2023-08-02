@@ -12,7 +12,7 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
 	if pRequest.Method == "GET" {
 		pWriter.Header().Set("Content-Type", "application/json")
 
-		jsonCards, error := json.Marshal(globalCards)
+		jsonCards, error := json.Marshal(globalCardStacks)
 		if error != nil {
 			pWriter.WriteHeader(500)
 			return
@@ -46,6 +46,6 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
             return
         }
 
-        globalCards = append(globalCards, requestInfo)
+        globalCardStacks = append(globalCardStacks, requestInfo)
 	}
 }
