@@ -17,6 +17,9 @@ function initMainPage() {
 
             let button = document.createElement("div")
             button.classList.add("stack-button")
+            button.onclick = () => {
+                window.location.href = `${location.origin}/stack/${stackId}`
+            }
 
             let title = document.createElement("h1")
             title.innerText = stack.name
