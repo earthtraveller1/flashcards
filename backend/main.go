@@ -13,7 +13,7 @@ type CardStack struct {
     Description string `json:"description"`
 }
 
-var globalCardStacks []CardStack
+var globalCardStacks map[string]CardStack
 
 func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
 	fileName := pRequest.URL.RequestURI()
@@ -75,11 +75,13 @@ const serverInfo = {
 }
 
 func main() {
-	globalCardStacks = append(globalCardStacks, CardStack{Name: "Neng", Description: "Neng Li is the President of China"})
-	globalCardStacks = append(globalCardStacks, CardStack{Name: "Prussia", Description: "German state during the 1800s or something."})
+    globalCardStacks = make(map[string]CardStack)
+	globalCardStacks["neng"] = CardStack{Name: "Neng", Description: "Neng Li is the President of China"}
+	globalCardStacks["prussia"] = CardStack{Name: "Prussia", Description: "German state during the 1800s or something."}
 
 	http.HandleFunc("/", staticFiles)
     http.HandleFunc("/stack/", stackPage)
+
 	http.HandleFunc("/api/cardstacks", apiCardStacks)
 
 	error := http.ListenAndServe("127.0.0.1:3000", nil)

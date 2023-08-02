@@ -6,6 +6,7 @@ import (
     "io"
     "fmt"
     "os"
+    "strings"
 )
 
 func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
@@ -46,6 +47,9 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
             return
         }
 
-        globalCardStacks = append(globalCardStacks, requestInfo)
+        stackId := strings.ReplaceAll(requestInfo.Name, " ", "_")
+        stackId = strings.ToLower(stackId)
+
+        globalCardStacks[stackId] = requestInfo
 	}
 }
