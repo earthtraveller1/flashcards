@@ -1,4 +1,4 @@
-async function getCards() {
+async function getStacks() {
     let response
 
     let res = await fetch("/api/cardstacks")
@@ -8,11 +8,13 @@ async function getCards() {
 }
 
 function initMainPage() {
-    getCards().then(cards => {
+    getStacks().then(stacks => {
         let stacksListElement = document.getElementById("stack-list")
         stacksListElement.innerHTML = ""
 
-        cards.forEach((stack, _i, _stacks) => {
+        for (let stackId in stacks) {
+            let stack = stacks[stackId]
+
             let button = document.createElement("div")
             button.classList.add("stack-button")
 
@@ -26,7 +28,7 @@ function initMainPage() {
             button.appendChild(description)
 
             stacksListElement.appendChild(button)
-        })
+        }
     })
 }
 
