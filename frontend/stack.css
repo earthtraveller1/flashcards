@@ -15,3 +15,13 @@ body {
     font-size: 1.25em;
     text-align: center;
 }
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stack-button {
+    margin-top: 1em;
+}
