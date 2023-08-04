@@ -1,12 +1,12 @@
 package main
 
 import (
-    "net/http"
-    "encoding/json"
-    "io"
-    "fmt"
-    "os"
-    "strings"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
 )
 
 func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
@@ -21,63 +21,63 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
 
 		pWriter.Write(jsonCards)
 	} else if pRequest.Method == "POST" {
-        requestBodyRaw := make([]byte, 0, 256)
+		requestBodyRaw := make([]byte, 0, 256)
 
-        reading := true
-        for reading {
-            tempBuffer := make([]byte, 256)
-            bytesRead, error := pRequest.Body.Read(tempBuffer)
-            if error == io.EOF {
-                reading = false
-            } else if error != nil {
-                fmt.Fprintf(os.Stderr, "[ERROR]: %s", error)
-                return
-            }
+		reading := true
+		for reading {
+			tempBuffer := make([]byte, 256)
+			bytesRead, error := pRequest.Body.Read(tempBuffer)
+			if error == io.EOF {
+				reading = false
+			} else if error != nil {
+				fmt.Fprintf(os.Stderr, "[ERROR]: %s", error)
+				return
+			}
 
-            requestBodyRaw = append(requestBodyRaw, tempBuffer[:bytesRead]...)
-        }
+			requestBodyRaw = append(requestBodyRaw, tempBuffer[:bytesRead]...)
+		}
 
-        var requestInfo CardStack
-        error := json.Unmarshal(requestBodyRaw, &requestInfo)
-        if error != nil {
-            pWriter.WriteHeader(400)
-            pWriter.Header().Set("Content-Type", "application/json")
-            pWriter.Write([]byte(fmt.Sprintf("\"error\": \"%s\"", error)))
+		var requestInfo CardStack
+		error := json.Unmarshal(requestBodyRaw, &requestInfo)
+		if error != nil {
+			pWriter.WriteHeader(400)
+			pWriter.Header().Set("Content-Type", "application/json")
+			pWriter.Write([]byte(fmt.Sprintf("\"error\": \"%s\"", error)))
 
-            return
-        }
+			return
+		}
 
-        stackId := strings.ReplaceAll(requestInfo.Name, " ", "_")
-        stackId = strings.ToLower(stackId)
+		stackId := strings.ReplaceAll(requestInfo.Name, " ", "_")
+		stackId = strings.ToLower(stackId)
 
-        globalCardStacks[stackId] = requestInfo
+		globalCardStacks[stackId] = requestInfo
 	}
 }
 
 func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
-    uriParts := strings.Split(pRequest.URL.RequestURI(), "/")
-    stackID := uriParts[len(uriParts) - 1]
+	uriParts := strings.Split(pRequest.URL.RequestURI(), "/")
+	stackID := uriParts[len(uriParts)-1]
 
-    if pRequest.Method == "GET" {
-        pWriter.Header().Set("Content-Type", "application/json")
-        requestedStack, exists := globalCardStacks[stackID]
+	if pRequest.Method == "GET" {
+		pWriter.Header().Set("Content-Type", "application/json")
+		requestedStack, exists := globalCardStacks[stackID]
 
-        if !exists {
-            pWriter.WriteHeader(404)
-            pWriter.Write([]byte(fmt.Sprintf(`{ "error": "the %s stack does not exist"}`, stackID)))
+		if !exists {
+			pWriter.WriteHeader(404)
+			pWriter.Write([]byte(fmt.Sprintf(`{ "error": "the %s stack does not exist"}`, stackID)))
 
-            return
-        }
+			return
+		}
 
-        stackJSON, error := json.Marshal(requestedStack)
+		stackJSON, error := json.Marshal(requestedStack)
 
-        if error != nil {
-            pWriter.WriteHeader(500)
-            pWriter.Write([]byte(`{ "error": "internal server error"}`))
+		if error != nil {
+			pWriter.WriteHeader(500)
+			pWriter.Write([]byte(`{ "error": "internal server error"}`))
 
-            return
-        }
+			return
+		}
 
-        pWriter.Write(stackJSON)
-    }
+		pWriter.Write(stackJSON)
+	}
 }
