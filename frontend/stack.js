@@ -18,6 +18,15 @@ function initMainPage() {
 
         let mainDescription = document.getElementById("main-description")
         mainDescription.innerText = stack.description
+
+        let deleteButton = document.getElementById("delete-button")
+        deleteButton.onclick = () => {
+            fetch(`/api/cardstacks/${serverInfo.stackName}`, { method: "DELETE" })
+                .then(() => {
+                    window.location.href = `${location.origin}`
+                })
+                .catch(console.error)
+        }
     })
 }
 
