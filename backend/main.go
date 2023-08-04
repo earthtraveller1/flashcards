@@ -8,9 +8,15 @@ import (
 	"strings"
 )
 
+type Card struct {
+	Front string `json:"front"`
+	Back  string `json:"back"`
+}
+
 type CardStack struct {
-    Name        string `json:"name"`
-    Description string `json:"description"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Cards       []Card `json:"cards"`
 }
 
 var globalCardStacks map[string]CardStack
@@ -43,47 +49,47 @@ func doesFileExist(pFilename string) bool {
 }
 
 func stackPage(pWriter http.ResponseWriter, pRequest *http.Request) {
-    uri := pRequest.URL.RequestURI()
-    uriParts := strings.Split(uri, "/")
-    stackName := uriParts[len(uriParts) - 1]
+	uri := pRequest.URL.RequestURI()
+	uriParts := strings.Split(uri, "/")
+	stackName := uriParts[len(uriParts)-1]
 
-    stackPageTemplateBytes, error := ioutil.ReadFile("stack.html")
-    if error != nil {
-        pWriter.WriteHeader(500)
-        pWriter.Write([]byte("<h1>500</h1> <p>Internal server error"))
+	stackPageTemplateBytes, error := ioutil.ReadFile("stack.html")
+	if error != nil {
+		pWriter.WriteHeader(500)
+		pWriter.Write([]byte("<h1>500</h1> <p>Internal server error"))
 
-        fmt.Fprintf(os.Stderr, "[ERROR]: stack.html does not appear to exist, or I cannot load it or something.\n")
-    }
+		fmt.Fprintf(os.Stderr, "[ERROR]: stack.html does not appear to exist, or I cannot load it or something.\n")
+	}
 
-    stackPageTemplate := string(stackPageTemplateBytes)
+	stackPageTemplate := string(stackPageTemplateBytes)
 
-    substitution := "{{{server}}}"
-    serverParams := `
+	substitution := "{{{server}}}"
+	serverParams := `
 const serverInfo = {
     stackName: "%s"
 }
     `
 
-    serverParams = fmt.Sprintf(serverParams, stackName)
+	serverParams = fmt.Sprintf(serverParams, stackName)
 
-    var stackPage string
-    if strings.Contains(stackPageTemplate, substitution) {
-        stackPage = strings.Replace(stackPageTemplate, substitution, serverParams, 1)
-    }
+	var stackPage string
+	if strings.Contains(stackPageTemplate, substitution) {
+		stackPage = strings.Replace(stackPageTemplate, substitution, serverParams, 1)
+	}
 
-    pWriter.Write([]byte(stackPage))
+	pWriter.Write([]byte(stackPage))
 }
 
 func main() {
-    globalCardStacks = make(map[string]CardStack)
+	globalCardStacks = make(map[string]CardStack)
 	globalCardStacks["neng"] = CardStack{Name: "Neng", Description: "Neng Li is the President of China"}
 	globalCardStacks["prussia"] = CardStack{Name: "Prussia", Description: "German state during the 1800s or something."}
 
 	http.HandleFunc("/", staticFiles)
-    http.HandleFunc("/stack/", stackPage)
+	http.HandleFunc("/stack/", stackPage)
 
 	http.HandleFunc("/api/cardstacks", apiCardStacks)
-    http.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
+	http.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
 
 	error := http.ListenAndServe("127.0.0.1:3000", nil)
 	if error != nil {
