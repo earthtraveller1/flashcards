@@ -79,5 +79,17 @@ func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
 		}
 
 		pWriter.Write(stackJSON)
-	}
+	} else if pRequest.Method == "DELETE" {
+        _, stackExists := globalCardStacks[stackID]
+        
+        if !stackExists {
+            pWriter.Header().Set("Content-Type", "application/json")
+            pWriter.WriteHeader(404)
+            fmt.Fprintf(pWriter, `{ "error": "the %s stack does not exist" }`, stackID)
+
+            return
+        }
+
+        delete(globalCardStacks, stackID)
+    }
 }
