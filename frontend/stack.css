@@ -25,3 +25,16 @@ body {
 .stack-button {
     margin-top: 1em;
 }
+
+#delete-button {
+    margin-top: 4em;
+    background-color: red;
+}
+
+#delete-button:hover {
+    background-color: rgb(180, 0, 0);
+}
+
+#delete-button:active {
+    background-color: rgb(255, 60, 60);
+}
