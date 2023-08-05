@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -35,7 +34,7 @@ func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
 		pWriter.Header().Set("Content-Type", "application/javascript")
 	}
 
-	fileContent, error := ioutil.ReadFile("../frontend/" + fileName)
+	fileContent, error := os.ReadFile("../frontend/" + fileName)
 	if error != nil {
 		pWriter.Write([]byte("<h1>404</h1> <p>Not Found"))
 	}
@@ -53,7 +52,7 @@ func stackPage(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uriParts := strings.Split(uri, "/")
 	stackName := uriParts[len(uriParts)-1]
 
-	stackPageTemplateBytes, error := ioutil.ReadFile("stack.html")
+	stackPageTemplateBytes, error := os.ReadFile("stack.html")
 	if error != nil {
 		pWriter.WriteHeader(500)
 		pWriter.Write([]byte("<h1>500</h1> <p>Internal server error"))
