@@ -51,7 +51,11 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
 		stackId = strings.ToLower(stackId)
 
 		globalCardStacks[stackId] = requestInfo
-	}
+	} else {
+        pWriter.WriteHeader(405)
+        pWriter.Header().Set("Content-Type", "application/json")
+        fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
+    }
 }
 
 func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
@@ -91,5 +95,10 @@ func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
         }
 
         delete(globalCardStacks, stackID)
+    } else {
+        pWriter.WriteHeader(405)
+        pWriter.Header().Set("Content-Type", "application/json")
+        fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
     }
+
 }
