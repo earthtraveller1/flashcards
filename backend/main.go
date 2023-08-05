@@ -91,7 +91,7 @@ func main() {
 	http.HandleFunc("/api/cardstacks", apiCardStacks)
 	http.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
 
-	error := http.ListenAndServe("127.0.0.1:3000", nil)
+	error := http.ListenAndServe(":3000", nil)
 	if error != nil {
 		fmt.Fprintf(os.Stderr, "[ERROR]: The server encountered an error: %s", error)
 	}
