@@ -15,7 +15,12 @@
         <h1 id="big-title">FlashCards</h1>
         <p id="subtitle">Yes, FlashCards. I know, very cool.</p>
 
-        <div id="stack-list"></div>
+        <div id="stack-list">
+            <div id="no-stacks-message">
+                It appears that you have no stacks. <br>
+                Click "Create a Stack" to create a stack.
+            </div>
+        </div>
 
         <div id="button-create-stacks-container">
             <button id="button-create-stacks" class="normal-button">Create a Stack</button>
@@ -26,8 +31,7 @@
         <h1 id="create-stack-title">Create Stack</h1>
 
         <div id="create-stack-form">
-            <input type="text" class="text-input" placeholder="Stack name" autocomplete="off"
-                id="new-stack-name">
+            <input type="text" class="text-input" placeholder="Stack name" autocomplete="off" id="new-stack-name">
             <br>
             <input type="text" class="text-input" placeholder="Short description" autocomplete="off"
                 id="new-stack-description">

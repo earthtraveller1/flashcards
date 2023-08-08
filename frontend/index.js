@@ -9,6 +9,10 @@ async function getStacks() {
 
 function initMainPage() {
     getStacks().then(stacks => {
+        if (Object.keys(stacks).length == 0) {
+            return
+        }
+
         let stacksListElement = document.getElementById("stack-list")
         stacksListElement.innerHTML = ""
 
@@ -53,7 +57,7 @@ function initCreateStackPage(mainPage, createStackPage) {
         }
 
         fetch("/api/cardstacks", {
-            method: "POST", 
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
