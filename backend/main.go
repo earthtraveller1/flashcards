@@ -62,7 +62,7 @@ func stackPage(pWriter http.ResponseWriter, pRequest *http.Request) {
 
 	stackPageTemplate := string(stackPageTemplateBytes)
 
-	substitution := "{{{server}}}"
+	substitution := "//{{{server}}}"
 	serverParams := `
 const serverInfo = {
     stackName: "%s"
