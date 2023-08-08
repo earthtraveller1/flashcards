@@ -63,4 +63,5 @@ body {
     text-align: center;
     border-radius: 1em;
     background-color: rgb(0, 0, 32);
+    user-select: none;
 }
