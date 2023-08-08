@@ -52,6 +52,13 @@ func stackPage(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uriParts := strings.Split(uri, "/")
 	stackName := uriParts[len(uriParts)-1]
 
+	_, stackExists := globalCardStacks[stackName]
+	if !stackExists {
+		pWriter.WriteHeader(404)
+		fmt.Fprintf(pWriter, "<h1>404</h1> <p>Not found")
+		return
+	}
+
 	stackPageTemplateBytes, error := os.ReadFile("stack.html")
 	if error != nil {
 		pWriter.WriteHeader(500)
