@@ -81,8 +81,6 @@ const serverInfo = {
 
 func main() {
 	globalCardStacks = make(map[string]CardStack)
-	globalCardStacks["neng"] = CardStack{Name: "Neng", Description: "Neng Li is the President of China"}
-	globalCardStacks["prussia"] = CardStack{Name: "Prussia", Description: "German state during the 1800s or something."}
 
 	http.HandleFunc("/", staticFiles)
 	http.HandleFunc("/stack/", stackPage)
