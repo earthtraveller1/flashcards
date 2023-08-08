@@ -1,6 +1,8 @@
 let globalStack;
 
+/** @type Node */
 let mainPage;
+/** @type Node */
 let cardsPage;
 
 async function getStack() {
@@ -9,7 +11,23 @@ async function getStack() {
     return stack
 }
 
+function initCardsPage() {
+    let returnToMainButton = document.getElementById("return-to-main-button")
+    returnToMainButton.onclick = () => {
+        cardsPage.parentElement.append(mainPage)
+        cardsPage.parentElement.removeChild(cardsPage)
+        initMainPage()
+    }
+}
+
 function initMainPage() {
+    let manageCardsButton = document.getElementById("manage-cards-button")
+    manageCardsButton.onclick = () => {
+        mainPage.parentElement.append(cardsPage)
+        mainPage.parentElement.removeChild(mainPage)
+        initCardsPage()
+    }
+
     getStack().then((stack) => {
         globalStack = stack
 
@@ -27,6 +45,7 @@ function initMainPage() {
                 })
                 .catch(console.error)
         }
+
     })
 }
 

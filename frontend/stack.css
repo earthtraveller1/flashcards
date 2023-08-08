@@ -3,7 +3,7 @@ body {
     color: white;
 }
 
-#main-title {
+.title {
     font-family: sans-serif;
     font-size: 5em;
     text-align: center;
@@ -26,6 +26,18 @@ body {
     margin-top: 1em;
 }
 
+.back-button {
+    background-color: rgb(32, 32, 32);
+}
+
+.back-button:hover {
+    background-color: rgb(16, 16, 16);
+}
+
+.back-button:active {
+    background-color: rgb(64, 64, 64);
+}
+
 #delete-button {
     margin-top: 4em;
     background-color: red;
@@ -37,4 +49,18 @@ body {
 
 #delete-button:active {
     background-color: rgb(255, 60, 60);
+}
+
+#no-cards-message {
+    font-family: sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    max-width: fit-content;
+    padding: 5em;
+    color: grey;
+    text-align: center;
+    border-radius: 1em;
+    background-color: rgb(0, 0, 32);
 }
