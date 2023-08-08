@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 )
 
 type Card struct {
@@ -86,17 +88,51 @@ const serverInfo = {
 	pWriter.Write([]byte(stackPage))
 }
 
+func runServer(waitGroup *sync.WaitGroup, server *http.Server) {
+	error := server.ListenAndServe()
+	if error != nil && error != http.ErrServerClosed {
+		fmt.Fprintf(os.Stderr, "[ERROR]: The server encountered an error: %s", error)
+	}
+
+	waitGroup.Done()
+}
+
+func interactiveConsole(server *http.Server) {
+	scanner := bufio.NewScanner(os.Stdin)
+	running := true
+
+	for running {
+		fmt.Printf("> ")
+		scanner.Scan()
+		command := scanner.Text()
+
+		if strings.HasPrefix(command, "shutdown") {
+			running = false
+			server.Shutdown(nil)
+		}
+	}
+}
+
 func main() {
 	globalCardStacks = make(map[string]CardStack)
 
-	http.HandleFunc("/", staticFiles)
-	http.HandleFunc("/stack/", stackPage)
-
-	http.HandleFunc("/api/cardstacks", apiCardStacks)
-	http.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
-
-	error := http.ListenAndServe(":3000", nil)
-	if error != nil {
-		fmt.Fprintf(os.Stderr, "[ERROR]: The server encountered an error: %s", error)
+	serverMux := http.NewServeMux()
+	server := http.Server{
+		Addr:    ":3000",
+		Handler: serverMux,
 	}
+
+	serverMux.HandleFunc("/", staticFiles)
+	serverMux.HandleFunc("/stack/", stackPage)
+
+	serverMux.HandleFunc("/api/cardstacks", apiCardStacks)
+	serverMux.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
+
+	waitGroup := sync.WaitGroup{}
+	waitGroup.Add(1)
+
+	go runServer(&waitGroup, &server)
+	interactiveConsole(&server)
+
+	waitGroup.Wait()
 }
