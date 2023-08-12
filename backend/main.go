@@ -49,7 +49,22 @@ func doesFileExist(pFilename string) bool {
 	return !os.IsNotExist(error)
 }
 
-func stackPage(pWriter http.ResponseWriter, pRequest *http.Request) {
+func stackPage(pTemplate, pStackName string) string {
+	subsitution := "//{{{server}}}"
+	replacement := fmt.Sprintf(`
+const serverInfo = {
+    stackName: "%s"
+}
+    `, pStackName)
+
+	if strings.Contains(pTemplate, subsitution) {
+		return strings.Replace(pTemplate, subsitution, replacement, 1)
+	}
+
+	return pTemplate
+}
+
+func stackPageHander(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uri := pRequest.URL.RequestURI()
 	uriParts := strings.Split(uri, "/")
 	stackName := uriParts[len(uriParts)-1]
@@ -61,7 +76,7 @@ func stackPage(pWriter http.ResponseWriter, pRequest *http.Request) {
 		return
 	}
 
-	stackPageTemplateBytes, error := os.ReadFile("stack.html")
+	stackPageTemplate, error := os.ReadFile("stack.html")
 	if error != nil {
 		pWriter.WriteHeader(500)
 		pWriter.Write([]byte("<h1>500</h1> <p>Internal server error"))
@@ -69,23 +84,7 @@ func stackPage(pWriter http.ResponseWriter, pRequest *http.Request) {
 		fmt.Fprintf(os.Stderr, "[ERROR]: stack.html does not appear to exist, or I cannot load it or something.\n")
 	}
 
-	stackPageTemplate := string(stackPageTemplateBytes)
-
-	substitution := "//{{{server}}}"
-	serverParams := `
-const serverInfo = {
-    stackName: "%s"
-}
-    `
-
-	serverParams = fmt.Sprintf(serverParams, stackName)
-
-	var stackPage string
-	if strings.Contains(stackPageTemplate, substitution) {
-		stackPage = strings.Replace(stackPageTemplate, substitution, serverParams, 1)
-	}
-
-	pWriter.Write([]byte(stackPage))
+	pWriter.Write([]byte(stackPage(string(stackPageTemplate), stackName)))
 }
 
 func runServer(waitGroup *sync.WaitGroup, server *http.Server) {
@@ -123,7 +122,7 @@ func main() {
 	}
 
 	serverMux.HandleFunc("/", staticFiles)
-	serverMux.HandleFunc("/stack/", stackPage)
+	serverMux.HandleFunc("/stack/", stackPageHander)
 
 	serverMux.HandleFunc("/api/cardstacks", apiCardStacks)
 	serverMux.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
