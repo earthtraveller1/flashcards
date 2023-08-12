@@ -107,7 +107,7 @@ func interactiveConsole(server *http.Server) {
 		scanner.Scan()
 		command := scanner.Text()
 
-		if strings.HasPrefix(command, "shutdown") {
+		if command == "q" {
 			running = false
 			server.Shutdown(nil)
 		}
