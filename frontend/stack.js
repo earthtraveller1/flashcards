@@ -18,7 +18,7 @@ let cardsPage;
 async function getStack() {
     const response = await fetch(`/api/cardstacks/${serverInfo.stackName}`)
     /** @type CardStack */
-    const stack = response.json()
+    const stack = await response.json()
     return stack
 }
 
