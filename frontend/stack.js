@@ -34,6 +34,9 @@ function initMainPage() {
         let mainTitle = document.getElementById("main-title")
         mainTitle.innerText = stack.name
 
+        let pageTitle = document.getElementById("page-title")
+        pageTitle.innerText = `${stack.name} - Flashcards`
+
         let mainDescription = document.getElementById("main-description")
         mainDescription.innerText = stack.description
 
