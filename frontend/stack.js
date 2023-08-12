@@ -1,3 +1,11 @@
+class CardStack {
+    /** @type string */
+    name;
+
+    /** @type string */
+    description;
+}
+
 let globalStack;
 
 /** @type Node */
@@ -5,8 +13,10 @@ let mainPage;
 /** @type Node */
 let cardsPage;
 
+/** @returns CardStack */
 async function getStack() {
     const response = await fetch(`/api/cardstacks/${serverInfo.stackName}`)
+    /** @type CardStack */
     const stack = response.json()
     return stack
 }
