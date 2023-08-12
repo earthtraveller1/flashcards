@@ -22,7 +22,7 @@ type CardStack struct {
 
 var globalCardStacks map[string]CardStack
 
-func staticFiles(pWriter http.ResponseWriter, pRequest *http.Request) {
+func staticFilesHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	fileName := pRequest.URL.RequestURI()
 	if fileName == "/" {
 		fileName = "index.html"
@@ -121,7 +121,7 @@ func main() {
 		Handler: serverMux,
 	}
 
-	serverMux.HandleFunc("/", staticFiles)
+	serverMux.HandleFunc("/", staticFilesHandler)
 	serverMux.HandleFunc("/stack/", stackPageHander)
 
 	serverMux.HandleFunc("/api/cardstacks", apiCardStacks)
