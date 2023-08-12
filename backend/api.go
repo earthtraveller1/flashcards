@@ -9,17 +9,38 @@ import (
 	"strings"
 )
 
+func getCardStacks(pWriter http.ResponseWriter, pRequest *http.Request, pStacks *map[string]CardStack) {
+	pWriter.Header().Set("Content-Type", "application/json")
+
+	jsonCards, error := json.Marshal(*pStacks)
+	if error != nil {
+		pWriter.WriteHeader(500)
+		return
+	}
+
+	pWriter.Write(jsonCards)
+}
+
+func createCardStack(pJSON []byte, pWriter http.ResponseWriter, pStacks *map[string]CardStack) {
+	var requestInfo CardStack
+	error := json.Unmarshal(pJSON, &requestInfo)
+	if error != nil {
+		pWriter.WriteHeader(400)
+		pWriter.Header().Set("Content-Type", "application/json")
+		pWriter.Write([]byte(fmt.Sprintf("\"error\": \"%s\"", error)))
+
+		return
+	}
+
+	stackId := strings.ReplaceAll(requestInfo.Name, " ", "_")
+	stackId = strings.ToLower(stackId)
+
+	(*pStacks)[stackId] = requestInfo
+}
+
 func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	if pRequest.Method == "GET" {
-		pWriter.Header().Set("Content-Type", "application/json")
-
-		jsonCards, error := json.Marshal(globalCardStacks)
-		if error != nil {
-			pWriter.WriteHeader(500)
-			return
-		}
-
-		pWriter.Write(jsonCards)
+		getCardStacks(pWriter, pRequest, &globalCardStacks)
 	} else if pRequest.Method == "POST" {
 		requestBodyRaw := make([]byte, 0, 256)
 
@@ -37,20 +58,7 @@ func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 			requestBodyRaw = append(requestBodyRaw, tempBuffer[:bytesRead]...)
 		}
 
-		var requestInfo CardStack
-		error := json.Unmarshal(requestBodyRaw, &requestInfo)
-		if error != nil {
-			pWriter.WriteHeader(400)
-			pWriter.Header().Set("Content-Type", "application/json")
-			pWriter.Write([]byte(fmt.Sprintf("\"error\": \"%s\"", error)))
-
-			return
-		}
-
-		stackId := strings.ReplaceAll(requestInfo.Name, " ", "_")
-		stackId = strings.ToLower(stackId)
-
-		globalCardStacks[stackId] = requestInfo
+		createCardStack(requestBodyRaw, pWriter, &globalCardStacks)
 	} else {
 		pWriter.WriteHeader(405)
 		pWriter.Header().Set("Content-Type", "application/json")
@@ -58,7 +66,7 @@ func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	}
 }
 
-func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
+func apiSpecificCardStackHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uriParts := strings.Split(pRequest.URL.RequestURI(), "/")
 	stackID := uriParts[len(uriParts)-1]
 
