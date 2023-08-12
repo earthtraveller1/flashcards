@@ -67,7 +67,9 @@ const serverInfo = {
 func stackPageHander(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uri := pRequest.URL.RequestURI()
 	uriParts := strings.Split(uri, "/")
-	stackName := uriParts[len(uriParts)-1]
+
+	// The first element is blank because of how the string split function works.
+	stackName := uriParts[2]
 
 	_, stackExists := globalCardStacks[stackName]
 	if !stackExists {
@@ -124,8 +126,8 @@ func main() {
 	serverMux.HandleFunc("/", staticFilesHandler)
 	serverMux.HandleFunc("/stack/", stackPageHander)
 
-	serverMux.HandleFunc("/api/cardstacks", apiCardStacks)
-	serverMux.HandleFunc("/api/cardstacks/", apiSpecificCardStack)
+	serverMux.HandleFunc("/api/cardstacks", apiCardStacksHandler)
+	serverMux.HandleFunc("/api/cardstacks/", apiSpecificCardStackHandler)
 
 	waitGroup := sync.WaitGroup{}
 	waitGroup.Add(1)
