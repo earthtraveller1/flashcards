@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
+func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	if pRequest.Method == "GET" {
 		pWriter.Header().Set("Content-Type", "application/json")
 
@@ -52,10 +52,10 @@ func apiCardStacks(pWriter http.ResponseWriter, pRequest *http.Request) {
 
 		globalCardStacks[stackId] = requestInfo
 	} else {
-        pWriter.WriteHeader(405)
-        pWriter.Header().Set("Content-Type", "application/json")
-        fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
-    }
+		pWriter.WriteHeader(405)
+		pWriter.Header().Set("Content-Type", "application/json")
+		fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
+	}
 }
 
 func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
@@ -84,21 +84,21 @@ func apiSpecificCardStack(pWriter http.ResponseWriter, pRequest *http.Request) {
 
 		pWriter.Write(stackJSON)
 	} else if pRequest.Method == "DELETE" {
-        _, stackExists := globalCardStacks[stackID]
-        
-        if !stackExists {
-            pWriter.Header().Set("Content-Type", "application/json")
-            pWriter.WriteHeader(404)
-            fmt.Fprintf(pWriter, `{ "error": "the %s stack does not exist" }`, stackID)
+		_, stackExists := globalCardStacks[stackID]
 
-            return
-        }
+		if !stackExists {
+			pWriter.Header().Set("Content-Type", "application/json")
+			pWriter.WriteHeader(404)
+			fmt.Fprintf(pWriter, `{ "error": "the %s stack does not exist" }`, stackID)
 
-        delete(globalCardStacks, stackID)
-    } else {
-        pWriter.WriteHeader(405)
-        pWriter.Header().Set("Content-Type", "application/json")
-        fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
-    }
+			return
+		}
+
+		delete(globalCardStacks, stackID)
+	} else {
+		pWriter.WriteHeader(405)
+		pWriter.Header().Set("Content-Type", "application/json")
+		fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
+	}
 
 }
