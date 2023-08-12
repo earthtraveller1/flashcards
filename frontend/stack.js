@@ -6,6 +6,7 @@ class CardStack {
     description;
 }
 
+/** @type CardStack */
 let globalStack;
 
 /** @type Node */
