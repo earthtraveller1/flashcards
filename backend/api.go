@@ -68,7 +68,7 @@ func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 
 func apiSpecificCardStackHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uriParts := strings.Split(pRequest.URL.RequestURI(), "/")
-	stackID := uriParts[len(uriParts)-1]
+	stackID := uriParts[3]
 
 	if pRequest.Method == "GET" {
 		pWriter.Header().Set("Content-Type", "application/json")
