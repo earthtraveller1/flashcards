@@ -132,6 +132,8 @@ func main() {
 	waitGroup := sync.WaitGroup{}
 	waitGroup.Add(1)
 
+	fmt.Printf("Starting server at http://127.0.0.1:3000\n")
+
 	go runServer(&waitGroup, &server)
 	interactiveConsole(&server)
 
