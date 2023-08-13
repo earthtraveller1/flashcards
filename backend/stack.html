@@ -36,9 +36,22 @@
         </div>
 
         <div class="buttons-container">
-            <button class="normal-button stack-button">Add Card</button>
+            <button id="add-card-button" class="normal-button stack-button">Add Card</button>
             <button id="return-to-main-button" class="normal-button stack-button back-button">Back</button>
         </div class="buttons-container">
+    </main>
+
+    <main id="add-card-page">
+        <h1 class="title">Add a Card</h1>
+
+        <div id="create-card-form">
+            <input type="text" class="text-input" placeholder="Front Side" autocomplete="off" id="new-card-front">
+            <br>
+            <input type="text" class="text-input" placeholder="Back Side" autocomplete="off" id="new-card-back">
+
+            <button class="normal-button" id="create-card-button">Create Stack</button>
+            <button class="normal-button cancel-button" id="create-card-cancel-button">Cancel</button>
+        </div>
     </main>
 </body>
 

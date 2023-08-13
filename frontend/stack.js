@@ -13,6 +13,8 @@ let globalStack;
 let mainPage;
 /** @type Node */
 let cardsPage;
+/** @type Node */
+let addCardPage;
 
 /** @returns CardStack */
 async function getStack() {
@@ -22,12 +24,23 @@ async function getStack() {
     return stack
 }
 
+function initCreateCardPage() {
+    // TODO: Attach all of the event handlers.
+}
+
 function initCardsPage() {
     let returnToMainButton = document.getElementById("return-to-main-button")
     returnToMainButton.onclick = () => {
         cardsPage.parentElement.append(mainPage)
         cardsPage.parentElement.removeChild(cardsPage)
         initMainPage()
+    }
+
+    let addCardButton = document.getElementById("add-card-button")
+    addCardButton.onclick = () => {
+        cardsPage.parentElement.appendChild(addCardPage)
+        cardsPage.parentElement.removeChild(cardsPage)
+        initCreateCardPage()
     }
 }
 
@@ -66,8 +79,10 @@ function initMainPage() {
 function main() {
     mainPage = document.getElementById("main")
     cardsPage = document.getElementById("cards-page")
+    addCardPage = document.getElementById("add-card-page")
 
     cardsPage.parentElement.removeChild(cardsPage)
+    addCardPage.parentElement.removeChild(addCardPage)
 
     initMainPage()
 }
