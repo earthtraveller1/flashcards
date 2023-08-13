@@ -9,6 +9,12 @@ import (
 	"strings"
 )
 
+type StackNotExistError struct{}
+
+func (error StackNotExistError) Error() string {
+	return "the requested stack does not exists"
+}
+
 func getCardStacks(pWriter http.ResponseWriter, pRequest *http.Request, pStacks *map[string]CardStack) {
 	pWriter.Header().Set("Content-Type", "application/json")
 
@@ -36,6 +42,18 @@ func createCardStack(pJSON []byte, pWriter http.ResponseWriter, pStacks *map[str
 	stackId = strings.ToLower(stackId)
 
 	(*pStacks)[stackId] = requestInfo
+}
+
+func addCardToStack(pCard Card, pStackName string, pStacks *map[string]CardStack) error {
+	stack, stackExists := (*pStacks)[pStackName]
+	if stackExists {
+		stack.Cards = append(stack.Cards, pCard)
+		(*pStacks)[pStackName] = stack
+
+		return nil
+	}
+
+	return StackNotExistError{}
 }
 
 func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
@@ -66,9 +84,51 @@ func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	}
 }
 
+func apiCardStacksCardsHandler(pStackID string, uriParts []string, pWriter http.ResponseWriter, pRequest *http.Request) {
+	if pRequest.Method == "POST" {
+		requestBodyRaw := make([]byte, 0, 256)
+
+		reading := true
+		for reading {
+			tempBuffer := make([]byte, 256)
+			bytesRead, error := pRequest.Body.Read(tempBuffer)
+			if error == io.EOF {
+				reading = false
+			} else if error != nil {
+				fmt.Fprintf(os.Stderr, "[ERROR]: %s", error)
+				return
+			}
+
+			requestBodyRaw = append(requestBodyRaw, tempBuffer[:bytesRead]...)
+		}
+
+		var card Card
+		error := json.Unmarshal(requestBodyRaw, &card)
+		if error != nil {
+			fmt.Fprintf(pWriter, `{ "error": "%s" }`, error)
+			pWriter.Header().Set("Content-Type", "application/json")
+			pWriter.WriteHeader(500)
+
+			return
+		}
+
+		addCardToStack(card, pStackID, &globalCardStacks)
+	} else {
+		fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
+		pWriter.Header().Set("Content-Type", "application/json")
+		pWriter.WriteHeader(405)
+	}
+}
+
 func apiSpecificCardStackHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uriParts := strings.Split(pRequest.URL.RequestURI(), "/")
 	stackID := uriParts[3]
+
+	// Reroute to the cards handler if there is more to the URI
+	if len(uriParts) > 5 && uriParts[4] == "cards" {
+		apiCardStacksCardsHandler(stackID, uriParts, pWriter, pRequest)
+		return
+	}
 
 	if pRequest.Method == "GET" {
 		pWriter.Header().Set("Content-Type", "application/json")
