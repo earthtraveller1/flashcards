@@ -39,8 +39,13 @@ function initMainPage() {
     })
 }
 
+/**
+ * @param {Node} mainPage
+ * @param {Node} createStackPage
+ */
 function initCreateStackPage(mainPage, createStackPage) {
     let button = document.getElementById("create-stack-submit-button")
+    let cancelButton = document.getElementById("create-stack-cancel-button")
     let stackName = document.getElementById("new-stack-name")
     let stackDescription = document.getElementById("new-stack-description")
 
@@ -67,6 +72,12 @@ function initCreateStackPage(mainPage, createStackPage) {
             createStackPage.remove()
             initMainPage()
         }).catch(console.error)
+    }
+
+    cancelButton.onclick = () => {
+        createStackPage.parentElement.appendChild(mainPage)
+        createStackPage.parentElement.removeChild(createStackPage)
+        initMainPage()
     }
 }
 
