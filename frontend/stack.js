@@ -25,7 +25,19 @@ async function getStack() {
 }
 
 function initCreateCardPage() {
-    // TODO: Attach all of the event handlers.
+    // Clear the input fields
+    let newCardFrontInput = document.getElementById("new-card-front")
+    let newCardBackInput = document.getElementById("new-card-back")
+
+    newCardFrontInput.value = ""
+    newCardBackInput.value = ""
+
+    let cancelButton = document.getElementById("create-card-cancel-button")
+    cancelButton.onclick = () => {
+        addCardPage.parentElement.appendChild(cardsPage)
+        addCardPage.parentElement.removeChild(addCardPage)
+        initCardsPage()
+    }
 }
 
 function initCardsPage() {
