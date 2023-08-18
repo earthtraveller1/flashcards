@@ -35,6 +35,20 @@ async function getStack() {
     return stack
 }
 
+/** @param {Card} card */
+async function submitCard(card) {
+    try {
+        await fetch(`/api/cardstacks/${serverInfo.stackName}/cards`, { method: "POST", body: JSON.stringify(card) })
+    } catch (e) {
+        console.error(e)
+    }
+
+    // Switch back to the page.
+    addCardPage.parentElement.appendChild(cardsPage)
+    addCardPage.parentElement.removeChild(addCardPage)
+    initCardsPage()
+}
+
 function initCreateCardPage() {
     // Clear the input fields
     let newCardFrontInput = document.getElementById("new-card-front")
@@ -48,6 +62,18 @@ function initCreateCardPage() {
         addCardPage.parentElement.appendChild(cardsPage)
         addCardPage.parentElement.removeChild(addCardPage)
         initCardsPage()
+    }
+
+    let createButton = document.getElementById("create-card-button")
+    let newCardFront = document.getElementById("new-card-front")
+    let newCardBack = document.getElementById("new-card-back")
+
+    createButton.onclick = () => {
+        let card = new Card()
+        card.front = newCardFront.value
+        card.back = newCardBack.value
+
+        submitCard(card).catch(console.error)
     }
 }
 
