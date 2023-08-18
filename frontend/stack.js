@@ -1,9 +1,20 @@
+class Card {
+    /** @type string */
+    front;
+
+    /** @type string */
+    back;
+}
+
 class CardStack {
     /** @type string */
     name;
 
     /** @type string */
     description;
+
+    /** @type Card[] */
+    cards;
 }
 
 /** @type CardStack */
