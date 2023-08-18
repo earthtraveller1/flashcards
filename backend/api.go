@@ -125,7 +125,7 @@ func apiSpecificCardStackHandler(pWriter http.ResponseWriter, pRequest *http.Req
 	stackID := uriParts[3]
 
 	// Reroute to the cards handler if there is more to the URI
-	if len(uriParts) > 5 && uriParts[4] == "cards" {
+	if len(uriParts) >= 5 && uriParts[4] == "cards" {
 		apiCardStacksCardsHandler(stackID, uriParts, pWriter, pRequest)
 		return
 	}
