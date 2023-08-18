@@ -107,7 +107,7 @@ func apiCardStacksCardsHandler(pStackID string, uriParts []string, pWriter http.
 		if error != nil {
 			fmt.Fprintf(pWriter, `{ "error": "%s" }`, error)
 			pWriter.Header().Set("Content-Type", "application/json")
-			pWriter.WriteHeader(500)
+			pWriter.WriteHeader(400)
 
 			return
 		}
