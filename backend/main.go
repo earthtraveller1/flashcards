@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -14,10 +15,20 @@ type Card struct {
 	Back  string `json:"back"`
 }
 
+type CardSlice []Card
+
 type CardStack struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Cards       []Card `json:"cards"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Cards       CardSlice `json:"cards"`
+}
+
+func (slice CardSlice) MarshalJSON() ([]byte, error) {
+	if len(slice) == 0 {
+		return []byte("[]"), nil
+	}
+
+	return json.Marshal([]Card(slice))
 }
 
 var globalCardStacks map[string]CardStack
