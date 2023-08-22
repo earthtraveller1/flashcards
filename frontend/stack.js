@@ -91,6 +91,34 @@ function initCardsPage() {
         cardsPage.parentElement.removeChild(cardsPage)
         initCreateCardPage()
     }
+
+    getStack().then((cardStack) => {
+        globalStack = cardStack
+    }).catch((reason) => {
+        console.error(reason)
+    }).finally(() => {
+        let cards = document.getElementById("cards")
+        if (globalStack.cards.length > 0) {
+            cards.innerHTML = ""
+        }
+
+        globalStack.cards.forEach((card, _2, _3) => {
+            let cardFrontElement = document.createElement("div")
+            cardFrontElement.innerText = card.front
+            cardFrontElement.classList.add("card-front")
+
+            let cardBackElement = document.createElement("div")
+            cardBackElement.innerText = card.back
+            cardBackElement.classList.add("card-back")
+
+            let cardElement = document.createElement("div")
+            cardElement.appendChild(cardFrontElement)
+            cardElement.appendChild(cardBackElement)
+            cardElement.classList.add("card")
+
+            cards.appendChild(cardElement)
+        })
+    })
 }
 
 function initMainPage() {
