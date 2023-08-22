@@ -82,3 +82,27 @@ body {
     font-family: sans-serif;
     font-size: 1.25em;
 }
+
+.card {
+    text-align: center;
+    padding: 1em;
+    background-color: rgb(2, 8, 71);
+    user-select: none;
+    margin-top: 2em;
+    border-radius: 1em;
+    transition-duration: 250ms;
+}
+
+.card:hover {
+    background-color: rgb(2, 8, 51);
+}
+
+.card:active {
+    background-color: rgb(3, 11, 94);
+}
+
+#cards {
+    max-width: 48em;
+    margin-left: auto;
+    margin-right: auto;
+}
