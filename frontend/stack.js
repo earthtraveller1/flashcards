@@ -107,12 +107,15 @@ function initCardsPage() {
             cardFrontElement.innerText = card.front
             cardFrontElement.classList.add("card-front")
 
+            let separator = document.createElement("hr")
+
             let cardBackElement = document.createElement("div")
             cardBackElement.innerText = card.back
             cardBackElement.classList.add("card-back")
 
             let cardElement = document.createElement("div")
             cardElement.appendChild(cardFrontElement)
+            cardElement.appendChild(separator)
             cardElement.appendChild(cardBackElement)
             cardElement.classList.add("card")
 
