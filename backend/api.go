@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -113,6 +114,30 @@ func apiCardStacksCardsHandler(pStackID string, uriParts []string, pWriter http.
 		}
 
 		addCardToStack(card, pStackID, &globalCardStacks)
+	} else if pRequest.Method == "DELETE" {
+		if len(uriParts) < 6 {
+			fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
+			pWriter.Header().Set("Content-Type", "application/json")
+			pWriter.WriteHeader(405)
+
+			return
+		}
+
+		cardIndex, err := strconv.Atoi(uriParts[5])
+		if err != nil {
+			fmt.Fprintf(pWriter, `{ "error": "invalid request" }`)
+			pWriter.Header().Set("Content-Type", "application/json")
+			pWriter.WriteHeader(400)
+
+			return
+		}
+
+		stack := globalCardStacks[pStackID]
+
+		stack.Cards[cardIndex] = stack.Cards[len(stack.Cards)-1]
+		stack.Cards = stack.Cards[:len(globalCardStacks)-1]
+
+		globalCardStacks[pStackID] = stack
 	} else {
 		fmt.Fprintf(pWriter, `{ "error": "method not allowed" }`)
 		pWriter.Header().Set("Content-Type", "application/json")
