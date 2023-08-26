@@ -77,6 +77,48 @@ function initCreateCardPage() {
     }
 }
 
+/**
+* @param {Node} cards
+    * @param {CardStack} stack
+*/
+function fillCardsList(cards, stack) {
+    cards.innerHTML = ""
+
+    stack.cards.forEach((card, index, _cards) => {
+        let cardFrontElement = document.createElement("div")
+        cardFrontElement.innerText = card.front
+        cardFrontElement.classList.add("card-front")
+
+        let separator = document.createElement("hr")
+
+        let cardBackElement = document.createElement("div")
+        cardBackElement.innerText = card.back
+        cardBackElement.classList.add("card-back")
+
+        let cardElement = document.createElement("div")
+        cardElement.appendChild(cardFrontElement)
+        cardElement.appendChild(separator)
+        cardElement.appendChild(cardBackElement)
+        cardElement.classList.add("card")
+
+        cardElement.onclick = () => {
+            fetch(`/api/cardstacks/${serverInfo.stackName}/cards/${index}`, { method: "DELETE" })
+                .then(() => {
+                    return fetch(`/api/cardstacks/${serverInfo.stackName}`)
+                })
+                .then((response) => {
+                    return response.json()
+                })
+                .then((pStack) => {
+                    fillCardsList(cards, pStack)
+                })
+                .catch(console.error)
+        }
+
+        cards.appendChild(cardElement)
+    })
+}
+
 function initCardsPage() {
     let returnToMainButton = document.getElementById("return-to-main-button")
     returnToMainButton.onclick = () => {
@@ -99,28 +141,8 @@ function initCardsPage() {
     }).finally(() => {
         let cards = document.getElementById("cards")
         if (globalStack.cards.length > 0) {
-            cards.innerHTML = ""
+            fillCardsList(cards, globalStack)
         }
-
-        globalStack.cards.forEach((card, _2, _3) => {
-            let cardFrontElement = document.createElement("div")
-            cardFrontElement.innerText = card.front
-            cardFrontElement.classList.add("card-front")
-
-            let separator = document.createElement("hr")
-
-            let cardBackElement = document.createElement("div")
-            cardBackElement.innerText = card.back
-            cardBackElement.classList.add("card-back")
-
-            let cardElement = document.createElement("div")
-            cardElement.appendChild(cardFrontElement)
-            cardElement.appendChild(separator)
-            cardElement.appendChild(cardBackElement)
-            cardElement.classList.add("card")
-
-            cards.appendChild(cardElement)
-        })
     })
 }
 
