@@ -57,6 +57,15 @@ func addCardToStack(pCard Card, pStackName string, pStacks *map[string]CardStack
 	return StackNotExistError{}
 }
 
+func removeFromStack(pStack *CardStack, pIndex int) {
+	if pIndex > len(pStack.Cards) {
+		return
+	}
+
+	(*pStack).Cards[pIndex] = (*pStack).Cards[len((*pStack).Cards)-1]
+	(*pStack).Cards = (*pStack).Cards[:len(globalCardStacks)-1]
+}
+
 func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
 	if pRequest.Method == "GET" {
 		getCardStacks(pWriter, pRequest, &globalCardStacks)
@@ -134,8 +143,7 @@ func apiCardStacksCardsHandler(pStackID string, uriParts []string, pWriter http.
 
 		stack := globalCardStacks[pStackID]
 
-		stack.Cards[cardIndex] = stack.Cards[len(stack.Cards)-1]
-		stack.Cards = stack.Cards[:len(globalCardStacks)-1]
+		removeFromStack(&stack, cardIndex)
 
 		globalCardStacks[pStackID] = stack
 	} else {
