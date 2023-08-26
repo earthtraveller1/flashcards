@@ -63,7 +63,7 @@ func removeFromStack(pStack *CardStack, pIndex int) {
 	}
 
 	(*pStack).Cards[pIndex] = (*pStack).Cards[len((*pStack).Cards)-1]
-	(*pStack).Cards = (*pStack).Cards[:len(globalCardStacks)-1]
+	(*pStack).Cards = (*pStack).Cards[:len((*pStack).Cards)-1]
 }
 
 func apiCardStacksHandler(pWriter http.ResponseWriter, pRequest *http.Request) {
