@@ -85,6 +85,8 @@ function initCreateCardPage() {
     * @param {CardStack} stack
 */
 function fillCardsList(cards, stack) {
+    cards.innerHTML = ""
+
     if (stack.cards.length <= 0) {
         cards.appendChild(noCardsMessage)
         return
@@ -150,7 +152,6 @@ function initCardsPage() {
         console.error(reason)
     }).finally(() => {
         let cards = document.getElementById("cards")
-        cards.innerHTML = ""
         fillCardsList(cards, globalStack)
     })
 }
