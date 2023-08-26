@@ -27,6 +27,9 @@ let cardsPage;
 /** @type Node */
 let addCardPage;
 
+/** @type Node */
+let noCardsMessage;
+
 /** @returns CardStack */
 async function getStack() {
     const response = await fetch(`/api/cardstacks/${serverInfo.stackName}`)
@@ -82,7 +85,10 @@ function initCreateCardPage() {
     * @param {CardStack} stack
 */
 function fillCardsList(cards, stack) {
-    cards.innerHTML = ""
+    if (stack.cards.length <= 0) {
+        cards.appendChild(noCardsMessage)
+        return
+    }
 
     stack.cards.forEach((card, index, _cards) => {
         let cardFrontElement = document.createElement("div")
@@ -134,15 +140,18 @@ function initCardsPage() {
         initCreateCardPage()
     }
 
+    if (noCardsMessage == undefined) {
+        noCardsMessage = document.getElementById("no-cards-message")
+    }
+
     getStack().then((cardStack) => {
         globalStack = cardStack
     }).catch((reason) => {
         console.error(reason)
     }).finally(() => {
         let cards = document.getElementById("cards")
-        if (globalStack.cards.length > 0) {
-            fillCardsList(cards, globalStack)
-        }
+        cards.innerHTML = ""
+        fillCardsList(cards, globalStack)
     })
 }
 
