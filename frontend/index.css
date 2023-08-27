@@ -22,6 +22,11 @@ body {
     .stack-button {
         font-size: 2em;
     }
+
+    #no-stacks-message {
+        font-size: 2em;
+        max-width: 48em;
+    }
 }
 
 #subtitle {
