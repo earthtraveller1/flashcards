@@ -10,6 +10,20 @@ body {
     margin-bottom: 0;
 }
 
+@media screen and (max-width: 1200px) {
+    #big-title {
+        font-size: 10em;
+    }
+
+    #subtitle {
+        font-size: 1em;
+    }
+
+    .stack-button {
+        font-size: 2em;
+    }
+}
+
 #subtitle {
     font-family: serif;
     font-style: italic;

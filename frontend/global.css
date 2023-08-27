@@ -14,6 +14,12 @@
     transition-duration: 250ms;
 }
 
+@media screen and (max-width: 1200px) {
+    .normal-button {
+        font-size: 4em;
+    }
+}
+
 .normal-button:hover {
     background-color: rgb(8, 38, 4);
 }
