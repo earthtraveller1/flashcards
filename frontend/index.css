@@ -102,6 +102,12 @@ body {
     user-select: none;
 }
 
+@media screen and (max-width: 1200px) {
+    #no-stacks-message {
+        max-width: 48em;
+    }
+}
+
 #create-stack-cancel-button {
     background-color: rgb(20, 20, 20);
 }
