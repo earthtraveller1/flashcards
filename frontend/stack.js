@@ -26,6 +26,8 @@ let mainPage;
 let cardsPage;
 /** @type Node */
 let addCardPage;
+/** @type Node */
+let studyPage;
 
 /** @type Node */
 let noCardsMessage;
@@ -156,12 +158,23 @@ function initCardsPage() {
     })
 }
 
+function initStudyPage() {
+
+}
+
 function initMainPage() {
     let manageCardsButton = document.getElementById("manage-cards-button")
     manageCardsButton.onclick = () => {
         mainPage.parentElement.append(cardsPage)
         mainPage.parentElement.removeChild(mainPage)
         initCardsPage()
+    }
+
+    let studyButton = document.getElementById("study-button")
+    studyButton.onclick = () => {
+        mainPage.parentElement.append(studyPage)
+        mainPage.parentElement.removeChild(mainPage)
+        initStudyPage()
     }
 
     getStack().then((stack) => {
@@ -192,9 +205,11 @@ function main() {
     mainPage = document.getElementById("main")
     cardsPage = document.getElementById("cards-page")
     addCardPage = document.getElementById("add-card-page")
+    studyPage = document.getElementById("study-page")
 
     cardsPage.parentElement.removeChild(cardsPage)
     addCardPage.parentElement.removeChild(addCardPage)
+    studyPage.parentElement.removeChild(studyPage)
 
     initMainPage()
 }
