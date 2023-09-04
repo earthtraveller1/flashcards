@@ -159,7 +159,8 @@ function initCardsPage() {
 }
 
 function initStudyPage() {
-
+    let title = document.getElementById("study-page-title")
+    title.innerText = globalStack.name
 }
 
 function initMainPage() {
