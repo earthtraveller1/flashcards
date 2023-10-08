@@ -32,6 +32,11 @@ let studyPage;
 /** @type Node */
 let noCardsMessage;
 
+/** @type number */
+let studyPageCurrentCardIndex = 0;
+/** @type boolean */
+let studyPageIsViewingFront = true;
+
 /** @returns CardStack */
 async function getStack() {
     const response = await fetch(`/api/cardstacks/${serverInfo.stackName}`)
@@ -161,6 +166,42 @@ function initCardsPage() {
 function initStudyPage() {
     let title = document.getElementById("study-page-title")
     title.innerText = globalStack.name
+
+    let currentCardText = document.getElementById("current-card")
+    currentCardText.innerText = globalStack.cards[studyPageCurrentCardIndex].front
+
+    let flipOverButton = document.getElementById("flip-over-button")
+    flipOverButton.onclick = () => {
+        if (studyPageIsViewingFront) {
+            currentCardText.innerText = globalStack.cards[studyPageCurrentCardIndex].back
+            studyPageIsViewingFront = false
+        } else {
+            currentCardText.innerText = globalStack.cards[studyPageCurrentCardIndex].front
+            studyPageIsViewingFront = true
+        }
+    }
+
+    let nextCardButton = document.getElementById("next-card-button")
+    nextCardButton.onclick = () => {
+        studyPageCurrentCardIndex++
+        if (studyPageCurrentCardIndex >= globalStack.cards.length) {
+            studyPageCurrentCardIndex = 0
+        }
+
+        studyPageIsViewingFront = true
+        currentCardText.innerText = globalStack.cards[studyPageCurrentCardIndex].front
+    }
+
+    let previousCardButton = document.getElementById("previous-card-button")
+    previousCardButton.onclick = () => {
+        studyPageCurrentCardIndex--
+        if (studyPageCurrentCardIndex < 0) {
+            studyPageCurrentCardIndex = globalStack.cards.length - 1
+        }
+
+        studyPageIsViewingFront = true
+        currentCardText.innerText = globalStack.cards[studyPageCurrentCardIndex].front
+    }
 }
 
 function initMainPage() {
