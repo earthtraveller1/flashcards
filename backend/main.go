@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 	"os"
 	"strings"
@@ -21,6 +22,10 @@ type CardStack struct {
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
 	Cards       CardSlice `json:"cards"`
+}
+
+type ServerInfo struct {
+	StackName string
 }
 
 func (slice CardSlice) MarshalJSON() ([]byte, error) {
@@ -60,21 +65,6 @@ func doesFileExist(pFilename string) bool {
 	return !os.IsNotExist(error)
 }
 
-func stackPage(pTemplate, pStackName string) string {
-	subsitution := "//{{{server}}}"
-	replacement := fmt.Sprintf(`
-const serverInfo = {
-    stackName: "%s"
-}
-    `, pStackName)
-
-	if strings.Contains(pTemplate, subsitution) {
-		return strings.Replace(pTemplate, subsitution, replacement, 1)
-	}
-
-	return pTemplate
-}
-
 func stackPageHander(pWriter http.ResponseWriter, pRequest *http.Request) {
 	uri := pRequest.URL.RequestURI()
 	uriParts := strings.Split(uri, "/")
@@ -89,15 +79,19 @@ func stackPageHander(pWriter http.ResponseWriter, pRequest *http.Request) {
 		return
 	}
 
-	stackPageTemplate, error := os.ReadFile("stack.html")
-	if error != nil {
+	stackPageTemplate, err := template.New("stack.html").ParseFiles("stack.html")
+	if err != nil {
 		pWriter.WriteHeader(500)
 		pWriter.Write([]byte("<h1>500</h1> <p>Internal server error"))
 
-		fmt.Fprintf(os.Stderr, "[ERROR]: stack.html does not appear to exist, or I cannot load it or something.\n")
+		fmt.Fprintf(os.Stderr, "Failed to parse template stack.html\n")
 	}
 
-	pWriter.Write([]byte(stackPage(string(stackPageTemplate), stackName)))
+	serverInfo := ServerInfo{
+		StackName: stackName,
+	}
+
+	stackPageTemplate.Execute(pWriter, serverInfo)
 }
 
 func runServer(waitGroup *sync.WaitGroup, server *http.Server) {
