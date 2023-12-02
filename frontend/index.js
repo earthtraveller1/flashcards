@@ -81,20 +81,17 @@ function initCreateStackPage(mainPage, createStackPage) {
     }
 }
 
-function main() {
-    let createStackPart = document.getElementById("create-stack-part")
-    let mainPage = document.getElementById("main")
+let createStackPart = document.getElementById("create-stack-part")
+let mainPage = document.getElementById("main")
 
-    createStackPart.remove()
+createStackPart.remove()
 
-    let createStackButton = document.getElementById("button-create-stacks")
-    createStackButton.onclick = () => {
-        mainPage.parentElement.append(createStackPart)
-        mainPage.remove()
-        initCreateStackPage(mainPage, createStackPart)
-    }
-
-    initMainPage()
+let createStackButton = document.getElementById("button-create-stacks")
+createStackButton.onclick = () => {
+    mainPage.parentElement.append(createStackPart)
+    mainPage.remove()
+    initCreateStackPage(mainPage, createStackPart)
 }
 
-main()
+initMainPage()
+
